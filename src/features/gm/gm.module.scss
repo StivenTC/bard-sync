@@ -83,21 +83,30 @@
   &.primary {
     background-color: #0070f3;
     color: white;
-    &:hover { background-color: #0051a2; }
+
+    &:hover {
+      background-color: #0051a2;
+    }
   }
 
   &.secondary {
     background-color: #444;
     color: white;
-    &:hover { background-color: #555; }
+
+    &:hover {
+      background-color: #555;
+    }
   }
 
   &.danger {
     background-color: #e00;
     color: white;
-    &:hover { background-color: #c00; }
+
+    &:hover {
+      background-color: #c00;
+    }
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -109,13 +118,13 @@
   border: 1px solid #444;
   padding: 0.5rem;
   text-align: center;
-  
+
   img {
     max-width: 100%;
     max-height: 200px;
     object-fit: contain;
   }
-  
+
   p {
     color: #888;
     font-style: italic;
@@ -125,7 +134,12 @@
 .status {
   margin-top: 1rem;
   font-size: 0.9rem;
-  
-  &.success { color: #4caf50; }
-  &.error { color: #f44336; }
+
+  &.success {
+    color: #4caf50;
+  }
+
+  &.error {
+    color: #f44336;
+  }
 }

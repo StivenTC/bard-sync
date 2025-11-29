@@ -15,7 +15,7 @@ export default function MusicPlayer({ videoId, playing, volume }: MusicPlayerPro
   // Construct URL from videoId
   const url = videoId ? `https://www.youtube.com/watch?v=${videoId}` : '';
 
-  // Convertir volumen de 0-100 a 0-1
+  // Convert volume from 0-100 to 0-1
   const normalizedVolume = volume / 100;
 
   if (!videoId) {
