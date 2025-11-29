@@ -76,3 +76,12 @@
     transform: scale(0.95);
   }
 }
+
+.playerWrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: auto;
+}
