@@ -1,0 +1,131 @@
+.container {
+  padding: 2rem;
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background-color: #2a2a2a;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #4da6ff;
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #ccc;
+  }
+
+  input[type="text"],
+  input[type="url"] {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #333;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 4px;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: #4da6ff;
+    }
+  }
+
+  input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  flex: 1;
+
+  &.primary {
+    background-color: #0070f3;
+    color: white;
+    &:hover { background-color: #0051a2; }
+  }
+
+  &.secondary {
+    background-color: #444;
+    color: white;
+    &:hover { background-color: #555; }
+  }
+
+  &.danger {
+    background-color: #e00;
+    color: white;
+    &:hover { background-color: #c00; }
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.preview {
+  margin-top: 1rem;
+  border: 1px solid #444;
+  padding: 0.5rem;
+  text-align: center;
+  
+  img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+  }
+  
+  p {
+    color: #888;
+    font-style: italic;
+  }
+}
+
+.status {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  
+  &.success { color: #4caf50; }
+  &.error { color: #f44336; }
+}
