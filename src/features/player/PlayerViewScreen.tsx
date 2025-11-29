@@ -15,11 +15,15 @@ export default function PlayerViewScreen() {
   const [hasJoined, setHasJoined] = useState(false);
   const [sceneUrl, setSceneUrl] = useState('');
 
-  // Music state
+  // Local volume state
+  const [localVolume, setLocalVolume] = useState(50);
+  const [isMuted, setIsMuted] = useState(false);
+
+  // Music state from Firebase
   const [musicState, setMusicState] = useState({
     videoId: '',
     isPlaying: false,
-    volume: 50
+    volume: 50 // We keep this to sync initial volume if needed, or just ignore it
   });
 
   useEffect(() => {
@@ -61,13 +65,42 @@ export default function PlayerViewScreen() {
       <h1>Player View</h1>
       {/* Music Component (Only renders if joined) */}
       {hasJoined && (
-        <div className={styles.playerWrapper}>
-          <MusicPlayer
-            videoId={musicState.videoId}
-            playing={musicState.isPlaying}
-            volume={musicState.volume}
-          />
-        </div>
+        <>
+          <div className={styles.playerWrapper}>
+            <MusicPlayer
+              videoId={musicState.videoId}
+              playing={musicState.isPlaying}
+              volume={isMuted ? 0 : localVolume}
+            />
+          </div>
+
+          {/* Local Volume Control */}
+          <div className={styles.volumeControl}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <button
+                onClick={() => setIsMuted(!isMuted)}
+                style={{
+                  background: 'none',
+                  border: '1px solid white',
+                  color: 'white',
+                  borderRadius: '4px',
+                  padding: '2px 5px',
+                  cursor: 'pointer'
+                }}
+              >
+                {isMuted ? 'Unmute' : 'Mute'}
+              </button>
+              <label>Volume</label>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={localVolume}
+              onChange={(e) => setLocalVolume(parseInt(e.target.value))}
+            />
+          </div>
+        </>
       )}
 
       {/* Background Layer */}

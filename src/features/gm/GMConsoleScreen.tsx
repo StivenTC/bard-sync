@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 import { ref, update, onValue } from 'firebase/database';
 import { db } from '@/lib/firebase';
 import styles from './gm.module.scss';
+import dynamic from 'next/dynamic';
+
+// Dynamic import for MusicPlayer
+const MusicPlayer = dynamic(() => import('@/features/player/components/MusicPlayer'), {
+  ssr: false
+});
 
 // Types for our state
 interface SceneState {
@@ -13,15 +19,18 @@ interface SceneState {
 interface MusicState {
   videoId: string;
   isPlaying: boolean;
-  volume: number;
+  // volume removed from global state
 }
 
 export default function GMConsoleScreen() {
   // Local state for inputs
   const [sceneUrl, setSceneUrl] = useState('');
   const [musicId, setMusicId] = useState('');
-  const [volume, setVolume] = useState(50);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  // Local audio state for GM
+  const [localVolume, setLocalVolume] = useState(50);
+  const [isMuted, setIsMuted] = useState(false);
 
   // Feedback state
   const [status, setStatus] = useState('');
@@ -40,7 +49,6 @@ export default function GMConsoleScreen() {
       const data = snapshot.val();
       if (data) {
         if (data.videoId) setMusicId(data.videoId);
-        if (typeof data.volume === 'number') setVolume(data.volume);
         if (typeof data.isPlaying === 'boolean') setIsPlaying(data.isPlaying);
       }
     });
@@ -76,12 +84,32 @@ export default function GMConsoleScreen() {
     }
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVol = parseInt(e.target.value);
-    setVolume(newVol);
-    // Simple debounce: update DB only on release or use a timeout if necessary.
-    // For simplicity in this phase, we update directly but could optimize.
-    updateMusicState({ volume: newVol });
+  const extractVideoId = (url: string) => {
+    try {
+      const urlObj = new URL(url);
+      if (urlObj.hostname.includes('youtube.com') || urlObj.hostname.includes('youtu.be')) {
+        return urlObj.searchParams.get('v') || urlObj.pathname.slice(1) || url;
+      }
+      return url;
+    } catch (e) {
+      return url;
+    }
+  };
+
+  const handleMusicIdChange = (val: string) => {
+    const id = extractVideoId(val);
+    setMusicId(id);
+  };
+
+  const handlePaste = async (setter: (val: string) => void, parser?: (val: string) => string) => {
+    try {
+      const text = await navigator.clipboard.readText();
+      const value = parser ? parser(text) : text;
+      setter(value);
+    } catch (err) {
+      console.error('Failed to read clipboard', err);
+      setStatus('Error reading clipboard');
+    }
   };
 
   return (
@@ -97,12 +125,17 @@ export default function GMConsoleScreen() {
           <h2>Visual Scene</h2>
           <div className={styles.formGroup}>
             <label>Image URL</label>
-            <input
-              type="url"
-              value={sceneUrl}
-              onChange={(e) => setSceneUrl(e.target.value)}
-              placeholder="https://example.com/map.jpg"
-            />
+            <div className={styles.inputGroup}>
+              <input
+                type="url"
+                value={sceneUrl}
+                onChange={(e) => setSceneUrl(e.target.value)}
+                placeholder="https://example.com/map.jpg"
+              />
+              <button className={styles.btn} onClick={() => handlePaste(setSceneUrl)}>
+                Paste
+              </button>
+            </div>
           </div>
           <div className={styles.preview}>
             {sceneUrl ? (
@@ -121,24 +154,53 @@ export default function GMConsoleScreen() {
         {/* Music Panel */}
         <div className={styles.card}>
           <h2>Music (YouTube)</h2>
+
+          {/* Hidden Local Player for GM */}
+          <MusicPlayer
+            videoId={musicId}
+            playing={isPlaying}
+            volume={isMuted ? 0 : localVolume}
+          />
+
           <div className={styles.formGroup}>
-            <label>YouTube Video ID</label>
-            <input
-              type="text"
-              value={musicId}
-              onChange={(e) => setMusicId(e.target.value)}
-              placeholder="Ex: dQw4w9WgXcQ"
-            />
+            <label>YouTube Video ID or URL</label>
+            <div className={styles.inputGroup}>
+              <input
+                type="text"
+                value={musicId}
+                onChange={(e) => handleMusicIdChange(e.target.value)}
+                placeholder="Ex: dQw4w9WgXcQ or full URL"
+              />
+              <button className={styles.btn} onClick={() => handlePaste(setMusicId, extractVideoId)}>
+                Paste
+              </button>
+            </div>
           </div>
 
           <div className={styles.formGroup}>
-            <label>Volume: {volume}%</label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
+              <label style={{ marginBottom: 0 }}>Local Monitoring Volume: {localVolume}%</label>
+              <button
+                onClick={() => setIsMuted(!isMuted)}
+                style={{
+                  background: 'none',
+                  border: '1px solid #ccc',
+                  color: '#ccc',
+                  borderRadius: '4px',
+                  padding: '2px 5px',
+                  cursor: 'pointer',
+                  fontSize: '0.8rem'
+                }}
+              >
+                {isMuted ? 'Unmute' : 'Mute'}
+              </button>
+            </div>
             <input
               type="range"
               min="0"
               max="100"
-              value={volume}
-              onChange={handleVolumeChange}
+              value={localVolume}
+              onChange={(e) => setLocalVolume(parseInt(e.target.value))}
             />
           </div>
 

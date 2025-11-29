@@ -65,6 +65,30 @@
   }
 }
 
+.inputGroup {
+  display: flex;
+  gap: 0.5rem;
+
+  input {
+    flex: 1;
+  }
+
+  button {
+    flex: 0 0 auto;
+    padding: 0.75rem 1rem;
+    background-color: #444;
+    color: white;
+    border: 1px solid #555;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: #555;
+    }
+  }
+}
+
 .buttonGroup {
   display: flex;
   gap: 1rem;
