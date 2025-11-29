@@ -1,20 +1,30 @@
 :root {
-  /* Modern Tavern Palette */
-  --color-bg-dark: #1a120b;
-  /* Deep brown/black */
-  --color-bg-panel: #2c1f16;
-  /* Dark wood tone */
+  /* Arcane Artifact Palette */
+  --color-bg-start: #0c0a09;
+  /* Charcoal Black */
+  --color-bg-end: #2c0b0e;
+  /* Deep Blood Red */
   --color-accent-gold: #d4af37;
-  /* Metallic gold */
-  --color-text-primary: #e5d5c5;
-  /* Parchment off-white */
-  --color-text-secondary: #a69080;
-  /* Muted earth tone */
-  --color-danger: #8b0000;
-  /* Blood red */
+  /* Aged Metallic Gold */
+  --color-accent-red: #7f1d1d;
+  /* Crimson Red */
+  --color-text-primary: #f5e6d3;
+  /* Parchment Cream */
+  --color-text-secondary: #a8a29e;
+  /* Muted Iron Grey */
 
-  --font-heading: 'Cinzel', serif;
-  --font-body: 'Inter', sans-serif;
+  --color-glass: rgba(12, 10, 9, 0.7);
+  /* Obsidian Glass */
+  --color-glass-border: rgba(212, 175, 55, 0.3);
+  /* Faint Gold Border */
+  --color-glass-highlight: rgba(212, 175, 55, 0.6);
+  /* Active Border Glow */
+
+  --font-heading: var(--font-macondo), serif;
+  --font-body: var(--font-zain), sans-serif;
+
+  --shadow-glow: 0 0 15px rgba(212, 175, 55, 0.15);
+  --shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
 
 html,
@@ -25,10 +35,12 @@ body {
 
 body {
   color: var(--color-text-primary);
-  background: var(--color-bg-dark);
+  background: radial-gradient(circle at center, var(--color-bg-end) 0%, var(--color-bg-start) 100%);
+  background-attachment: fixed;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
 * {
@@ -48,15 +60,16 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-dark);
+  background: var(--color-bg-start);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-bg-panel);
+  background: #2a2a2a;
   border: 1px solid var(--color-accent-gold);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-accent-gold);
+  box-shadow: 0 0 10px var(--color-accent-gold);
 }

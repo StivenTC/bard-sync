@@ -2,7 +2,7 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background-color: #000;
+  background-color: var(--color-bg-start);
   position: relative;
   font-family: var(--font-body);
 }
@@ -18,6 +18,18 @@
   background-repeat: no-repeat;
   transition: background-image 1s ease-in-out;
   z-index: 1;
+
+  /* Vignette overlay */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
+    pointer-events: none;
+  }
 }
 
 .overlay {
@@ -26,8 +38,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.85);
-  background-image: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  background-color: rgba(12, 10, 9, 0.85);
+  background-image: radial-gradient(circle at center, rgba(44, 11, 14, 0.4) 0%, transparent 70%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,23 +48,44 @@
   color: var(--color-text-primary);
 
   .overlayContent {
-    background-color: rgba(44, 31, 22, 0.9);
+    background-color: var(--color-glass);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 3rem;
     border-radius: 12px;
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    border: 1px solid var(--color-glass-border);
     text-align: center;
     max-width: 600px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-deep);
+    position: relative;
+    overflow: hidden;
+
+    /* Border glow animation */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-accent-gold), transparent);
+      opacity: 0.5;
+    }
+
+    &:hover {
+      border-color: var(--color-glass-highlight);
+      box-shadow: var(--shadow-glow), var(--shadow-deep);
+    }
   }
 
   h1 {
     font-family: var(--font-heading);
-    font-size: 3.5rem;
+    font-size: 4rem;
     margin-bottom: 1.5rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
     color: var(--color-accent-gold);
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
   }
 
   p {
@@ -60,6 +93,7 @@
     color: var(--color-text-secondary);
     line-height: 1.6;
     font-size: 1.1rem;
+    font-family: var(--font-body);
   }
 }
 
@@ -69,25 +103,27 @@
   gap: 0.75rem;
   padding: 1rem 3rem;
   font-size: 1.5rem;
-  background: transparent;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(127, 29, 29, 0.2) 100%);
   color: var(--color-accent-gold);
-  border: 2px solid var(--color-accent-gold);
-  border-radius: 4px;
+  border: 1px solid var(--color-accent-gold);
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   font-family: var(--font-heading);
   font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 
   &:hover {
-    background-color: rgba(212, 175, 55, 0.1);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-    transform: scale(1.05);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(127, 29, 29, 0.4) 100%);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+    transform: scale(1.02);
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
   }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.98);
   }
 }
 
@@ -102,65 +138,91 @@
 
 .volumeControl {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 30px;
+  right: 30px;
   z-index: 50;
-  background-color: rgba(44, 31, 22, 0.9);
-  padding: 15px;
-  border-radius: 8px;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background-color: var(--color-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-glass-border);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: var(--color-text-primary);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-  transition: opacity 0.3s ease;
+  box-shadow: var(--shadow-deep);
+  transition: all 0.3s ease;
+  min-width: 60px;
 
   &:hover {
-    border-color: var(--color-accent-gold);
+    border-color: var(--color-glass-highlight);
+    box-shadow: var(--shadow-glow), var(--shadow-deep);
   }
 }
 
 .volumeHeader {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
-  justify-content: space-between;
 }
 
 .volumeLabel {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--color-accent-gold);
   font-weight: bold;
-  min-width: 30px;
-  text-align: right;
+  font-family: var(--font-body);
 }
 
 .iconBtn {
-  background: transparent;
-  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--color-text-secondary);
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: color 0.2s;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
     color: var(--color-accent-gold);
-    background-color: rgba(212, 175, 55, 0.1);
+    background-color: rgba(212, 175, 55, 0.15);
+    border-color: var(--color-accent-gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
   }
 }
 
 .rangeInput {
-  width: 100%;
+  width: 100px;
+  /* Vertical slider height effectively */
   cursor: pointer;
   accent-color: var(--color-accent-gold);
   height: 4px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
+  appearance: none;
+
+  /* Rotate for vertical feel if desired, or keep horizontal compact */
+  /* transform: rotate(-90deg); */
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background: var(--color-accent-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+    margin-top: -5px;
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
 }

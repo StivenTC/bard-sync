@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { Cinzel, Inter } from "next/font/google";
+import { Macondo, Zain } from "next/font/google";
 import "./globals.css";
 
-const cinzel = Cinzel({
+const macondo = Macondo({
   subsets: ["latin"],
-  variable: "--font-cinzel",
+  weight: ["400"],
+  variable: "--font-macondo",
   display: "swap",
 });
 
-const inter = Inter({
+const zain = Zain({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["300", "400", "700", "800", "900"],
+  variable: "--font-zain",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "BardSync",
-  description: "D&D Soundboard & Scene Manager",
+  description: "Arcane Artifact for Tabletop RPGs",
 };
 
 export default function RootLayout({
@@ -25,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${cinzel.variable} ${inter.variable}`}>
+    <html lang="en" className={`${macondo.variable} ${zain.variable}`}>
+      <body>
         {children}
       </body>
     </html>
