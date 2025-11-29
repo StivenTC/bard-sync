@@ -1,13 +1,20 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Modern Tavern Palette */
+  --color-bg-dark: #1a120b;
+  /* Deep brown/black */
+  --color-bg-panel: #2c1f16;
+  /* Dark wood tone */
+  --color-accent-gold: #d4af37;
+  /* Metallic gold */
+  --color-text-primary: #e5d5c5;
+  /* Parchment off-white */
+  --color-text-secondary: #a69080;
+  /* Muted earth tone */
+  --color-danger: #8b0000;
+  /* Blood red */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
 }
 
 html,
@@ -17,9 +24,9 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--color-text-primary);
+  background: var(--color-bg-dark);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -35,8 +42,21 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-accent-gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-gold);
 }

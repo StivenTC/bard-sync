@@ -4,6 +4,7 @@
   overflow: hidden;
   background-color: #000;
   position: relative;
+  font-family: var(--font-body);
 }
 
 .background {
@@ -26,49 +27,62 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.85);
+  background-image: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 100;
-  color: white;
-  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--color-text-primary);
+
+  .overlayContent {
+    background-color: rgba(44, 31, 22, 0.9);
+    padding: 3rem;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    text-align: center;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
 
   h1 {
-    font-size: 3rem;
-    margin-bottom: 2rem;
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #ffd700;
-    /* Gold */
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    color: var(--color-accent-gold);
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
   }
 
   p {
-    margin-bottom: 2rem;
-    color: #ccc;
-    max-width: 600px;
-    text-align: center;
+    margin-bottom: 2.5rem;
+    color: var(--color-text-secondary);
     line-height: 1.6;
+    font-size: 1.1rem;
   }
 }
 
 .joinButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   padding: 1rem 3rem;
   font-size: 1.5rem;
-  background-color: transparent;
-  color: #ffd700;
-  border: 2px solid #ffd700;
+  background: transparent;
+  color: var(--color-accent-gold);
+  border: 2px solid var(--color-accent-gold);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-family: var(--font-heading);
   font-weight: bold;
 
   &:hover {
-    background-color: rgba(255, 215, 0, 0.1);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    background-color: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
     transform: scale(1.05);
   }
 
@@ -91,21 +105,62 @@
   bottom: 20px;
   right: 20px;
   z-index: 50;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 10px;
+  background-color: rgba(44, 31, 22, 0.9);
+  padding: 15px;
   border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  color: white;
+  gap: 10px;
+  color: var(--color-text-primary);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease;
 
-  label {
-    font-size: 0.8rem;
-    font-weight: bold;
+  &:hover {
+    border-color: var(--color-accent-gold);
   }
+}
 
-  input[type="range"] {
-    cursor: pointer;
+.volumeHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.volumeLabel {
+  font-size: 0.8rem;
+  color: var(--color-accent-gold);
+  font-weight: bold;
+  min-width: 30px;
+  text-align: right;
+}
+
+.iconBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: var(--color-accent-gold);
+    background-color: rgba(212, 175, 55, 0.1);
   }
+}
+
+.rangeInput {
+  width: 100%;
+  cursor: pointer;
+  accent-color: var(--color-accent-gold);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
 }

@@ -1,67 +1,46 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { ref, set, onValue } from 'firebase/database';
+import { useState, useEffect } from 'react';
+import { ref, onValue, set } from 'firebase/database';
 import { db } from '@/lib/firebase';
+import styles from './home.module.scss';
+import { Scroll, Users, Shield } from 'lucide-react';
 
 export default function HomeScreen() {
-  const [status, setStatus] = useState<string>('Waiting...');
-  const [lastValue, setLastValue] = useState<string>('');
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    // Listen for changes in the test node
-    const testRef = ref(db, 'test/connection');
-    const unsubscribe = onValue(testRef, (snapshot) => {
-      const data = snapshot.val();
-      setLastValue(JSON.stringify(data));
-    }, (error) => {
-      setStatus(`Read error: ${error.message}`);
+    const connectedRef = ref(db, '.info/connected');
+    const unsubscribe = onValue(connectedRef, (snap) => {
+      setIsConnected(!!snap.val());
     });
 
     return () => unsubscribe();
   }, []);
 
-  const testConnection = async () => {
-    setStatus('Attempting to write...');
-    try {
-      const testRef = ref(db, 'test/connection');
-      await set(testRef, {
-        timestamp: Date.now(),
-        message: 'Hello from BardSync',
-        ok: true
-      });
-      setStatus('Write successful! Check if "Last Value" updated.');
-    } catch (error: any) {
-      console.error(error);
-      setStatus(`Write error: ${error.message}`);
-    }
-  };
-
   return (
-    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>BardSync - Phase 1: Connection Test</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>BardSync</h1>
+      <p className={styles.subtitle}>Immersive Audio & Visuals for your Tabletop RPGs</p>
 
-      <div style={{ margin: '2rem 0', padding: '1rem', border: '1px solid #ccc' }}>
-        <p><strong>Status:</strong> {status}</p>
-        <p><strong>Last Value in DB:</strong> {lastValue}</p>
+      <div className={styles.card}>
+        <div className={styles.status}>
+          System Status: <strong>{isConnected ? 'Online' : 'Connecting...'}</strong>
+        </div>
 
-        <button
-          onClick={testConnection}
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            cursor: 'pointer',
-            backgroundColor: '#0070f3',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px'
-          }}
-        >
-          Test Connection (Write)
-        </button>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <a href="/gm" className={styles.btn}>
+            <Shield size={20} /> GM Console
+          </a>
+          <a href="/player" className={styles.btn}>
+            <Users size={20} /> Player View
+          </a>
+        </div>
       </div>
 
-      <p>If you see the timestamp update when clicking, the connection works.</p>
-    </main>
+      <div className={styles.footer}>
+        <p><Scroll size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} /> Crafted for Game Masters</p>
+      </div>
+    </div>
   );
 }

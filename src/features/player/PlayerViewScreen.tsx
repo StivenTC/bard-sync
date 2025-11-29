@@ -1,10 +1,12 @@
 'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { db } from '@/lib/firebase';
 import styles from './player.module.scss';
 import dynamic from 'next/dynamic';
+import { Volume2, VolumeX, Radio } from 'lucide-react';
 
 // Dynamic import to avoid SSR (Hydration Mismatch)
 const MusicPlayer = dynamic(() => import('./components/MusicPlayer'), {
@@ -62,7 +64,6 @@ export default function PlayerViewScreen() {
 
   return (
     <div className={styles.container}>
-      <h1>Player View</h1>
       {/* Music Component (Only renders if joined) */}
       {hasJoined && (
         <>
@@ -76,21 +77,15 @@ export default function PlayerViewScreen() {
 
           {/* Local Volume Control */}
           <div className={styles.volumeControl}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className={styles.volumeHeader}>
               <button
                 onClick={() => setIsMuted(!isMuted)}
-                style={{
-                  background: 'none',
-                  border: '1px solid white',
-                  color: 'white',
-                  borderRadius: '4px',
-                  padding: '2px 5px',
-                  cursor: 'pointer'
-                }}
+                className={styles.iconBtn}
+                title={isMuted ? "Unmute" : "Mute"}
               >
-                {isMuted ? 'Unmute' : 'Mute'}
+                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
               </button>
-              <label>Volume</label>
+              <span className={styles.volumeLabel}>{localVolume}%</span>
             </div>
             <input
               type="range"
@@ -98,6 +93,7 @@ export default function PlayerViewScreen() {
               max="100"
               value={localVolume}
               onChange={(e) => setLocalVolume(parseInt(e.target.value))}
+              className={styles.rangeInput}
             />
           </div>
         </>
@@ -112,13 +108,15 @@ export default function PlayerViewScreen() {
       {/* "Join" Overlay */}
       {!hasJoined && (
         <div className={styles.overlay}>
-          <h1>BardSync</h1>
-          <p>
-            Welcome to the session. Click the button to sync with the Game Master's board and enable audio.
-          </p>
-          <button className={styles.joinButton} onClick={handleJoin}>
-            Join Session
-          </button>
+          <div className={styles.overlayContent}>
+            <h1>BardSync</h1>
+            <p>
+              Welcome to the tavern. Click below to join the session and sync with the Game Master.
+            </p>
+            <button className={styles.joinButton} onClick={handleJoin}>
+              <Radio size={24} /> Join Session
+            </button>
+          </div>
         </div>
       )}
     </div>
