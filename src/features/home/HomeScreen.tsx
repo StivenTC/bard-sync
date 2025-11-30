@@ -29,7 +29,7 @@ export default function HomeScreen() {
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="/gm" className={styles.btn}>
+          <a href="/" className={styles.btn} >
             <Shield size={20} /> GM Console
           </a>
           <a href="/player" className={styles.btn}>
@@ -39,7 +39,7 @@ export default function HomeScreen() {
       </div>
 
       <div className={styles.footer}>
-        <p><Scroll size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} /> Crafted for Game Masters</p>
+        <p><Scroll size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} /> Crafted by Tcla for Game Masters</p>
       </div>
     </div>
   );
