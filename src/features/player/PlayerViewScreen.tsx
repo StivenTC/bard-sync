@@ -1,5 +1,4 @@
 'use client';
-'use client';
 
 import { useState, useEffect } from 'react';
 import { ref, onValue } from 'firebase/database';
@@ -7,6 +6,7 @@ import { db } from '@/lib/firebase';
 import styles from './player.module.scss';
 import dynamic from 'next/dynamic';
 import { Volume2, VolumeX, Radio } from 'lucide-react';
+import SoundboardPlayer from './components/SoundboardPlayer';
 
 // Dynamic import to avoid SSR (Hydration Mismatch)
 const MusicPlayer = dynamic(() => import('./components/MusicPlayer'), {
@@ -74,6 +74,9 @@ export default function PlayerViewScreen() {
               volume={isMuted ? 0 : localVolume}
             />
           </div>
+
+          {/* Soundboard Player (Invisible) */}
+          <SoundboardPlayer volume={isMuted ? 0 : localVolume} />
 
           {/* Local Volume Control */}
           <div className={styles.volumeControl}>

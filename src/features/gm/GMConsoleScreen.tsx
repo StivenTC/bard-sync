@@ -5,6 +5,8 @@ import { ref, update, onValue } from 'firebase/database';
 import { db } from '@/lib/firebase';
 import styles from './gm.module.scss';
 import dynamic from 'next/dynamic';
+import SoundboardPanel from './components/SoundboardPanel';
+import SoundboardPlayer from '@/features/player/components/SoundboardPlayer';
 import {
   Play,
   Pause,
@@ -380,6 +382,12 @@ export default function GMConsoleScreen() {
             </button>
           </div>
         </div>
+
+        {/* Soundboard Panel */}
+        <SoundboardPanel />
+
+        {/* Hidden Soundboard Player for GM Monitoring */}
+        <SoundboardPlayer volume={isMuted ? 0 : localVolume} />
       </div>
     </div>
   );
