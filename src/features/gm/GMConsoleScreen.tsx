@@ -174,25 +174,31 @@ export default function GMConsoleScreen() {
     return null;
   };
 
-  const updateMusicState = async (updates: Partial<MusicState>) => {
+  const updateMusicState = async (updates: Partial<MusicState> & { title?: string }) => {
     try {
-      await update(ref(db, 'session/current/music'), {
-        ...updates,
-        timestamp: Date.now() // Force update
-      });
+      // If we have a videoId but no title in updates, try to get it from cache or fetch it
+      let titleToSave = updates.title;
 
-      if (updates.videoId) {
+      if (updates.videoId && !titleToSave) {
         const id = updates.videoId;
         let name = videoTitleCache[id] || id;
 
-        // If name is just the ID, try to fetch the real title
         if (name === id) {
           const fetchedTitle = await fetchVideoTitle(id);
           if (fetchedTitle) name = fetchedTitle;
         }
+        titleToSave = name;
 
+        // Also update history
         addToHistory(name, id, recentTracks, setRecentTracks, 'recentTracks');
       }
+
+      await update(ref(db, 'session/current/music'), {
+        ...updates,
+        title: titleToSave || null,
+        timestamp: Date.now() // Force update
+      });
+
     } catch (error) {
       console.error(error);
       setStatus('Error updating music');

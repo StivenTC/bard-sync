@@ -5,7 +5,7 @@ import { ref, onValue } from 'firebase/database';
 import { db } from '@/lib/firebase';
 import styles from './player.module.scss';
 import dynamic from 'next/dynamic';
-import { Volume2, VolumeX, Radio } from 'lucide-react';
+import { Volume2, VolumeX, Radio, Pause, Music } from 'lucide-react';
 import SoundboardPlayer from './components/SoundboardPlayer';
 
 // Dynamic import to avoid SSR (Hydration Mismatch)
@@ -16,6 +16,7 @@ const MusicPlayer = dynamic(() => import('./components/MusicPlayer'), {
 export default function PlayerViewScreen() {
   const [hasJoined, setHasJoined] = useState(false);
   const [sceneUrl, setSceneUrl] = useState('');
+  const [sceneTitle, setSceneTitle] = useState('');
 
   // Local volume state
   const [localVolume, setLocalVolume] = useState(50);
@@ -24,8 +25,9 @@ export default function PlayerViewScreen() {
   // Music state from Firebase
   const [musicState, setMusicState] = useState({
     videoId: '',
+    title: '',
     isPlaying: false,
-    volume: 50 // We keep this to sync initial volume if needed, or just ignore it
+    volume: 50
   });
 
   useEffect(() => {
@@ -33,8 +35,9 @@ export default function PlayerViewScreen() {
     const sceneRef = ref(db, 'session/current/scene');
     const unsubScene = onValue(sceneRef, (snapshot) => {
       const data = snapshot.val();
-      if (data?.imageUrl) {
-        setSceneUrl(data.imageUrl);
+      if (data) {
+        if (data.imageUrl) setSceneUrl(data.imageUrl);
+        if (data.title) setSceneTitle(data.title);
       }
     });
 
@@ -45,6 +48,7 @@ export default function PlayerViewScreen() {
       if (data) {
         setMusicState({
           videoId: data.videoId || '',
+          title: data.title || '',
           isPlaying: data.isPlaying || false,
           volume: typeof data.volume === 'number' ? data.volume : 50
         });
@@ -78,26 +82,57 @@ export default function PlayerViewScreen() {
           {/* Soundboard Player (Invisible) */}
           <SoundboardPlayer volume={isMuted ? 0 : localVolume} />
 
-          {/* Local Volume Control */}
-          <div className={styles.volumeControl}>
-            <div className={styles.volumeHeader}>
-              <button
-                onClick={() => setIsMuted(!isMuted)}
-                className={styles.iconBtn}
-                title={isMuted ? "Unmute" : "Mute"}
-              >
-                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-              </button>
-              <span className={styles.volumeLabel}>{localVolume}%</span>
+          {/* Centered Info & Controls */}
+          <div className={styles.centerControls}>
+            <div className={styles.infoPanel}>
+              {sceneTitle && <h2 className={styles.sceneTitle}>{sceneTitle}</h2>}
+
+              <div className={styles.statusIcon}>
+                {musicState.videoId ? (
+                  musicState.isPlaying ? (
+                    <div className={styles.waveContainer}>
+                      <div className={styles.waveBar} />
+                      <div className={styles.waveBar} />
+                      <div className={styles.waveBar} />
+                      <div className={styles.waveBar} />
+                      <div className={styles.waveBar} />
+                    </div>
+                  ) : (
+                    <Pause size={32} />
+                  )
+                ) : (
+                  <Music size={32} style={{ opacity: 0.5 }} />
+                )}
+              </div>
+
+              <div className={styles.nowPlaying}>
+                <span className={styles.label}>Now Playing:</span>
+                <span className={styles.trackName}>
+                  {musicState.title || (musicState.videoId ? 'Loading...' : 'No Music')}
+                </span>
+              </div>
+
+              <div className={styles.volumeRow}>
+                <button
+                  onClick={() => setIsMuted(!isMuted)}
+                  className={styles.iconBtn}
+                  title={isMuted ? "Unmute" : "Mute"}
+                >
+                  {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                </button>
+
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={localVolume}
+                  onChange={(e) => setLocalVolume(parseInt(e.target.value))}
+                  className={styles.rangeInput}
+                />
+
+                <span className={styles.volumeLabel}>{localVolume}%</span>
+              </div>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={localVolume}
-              onChange={(e) => setLocalVolume(parseInt(e.target.value))}
-              className={styles.rangeInput}
-            />
           </div>
         </>
       )}
