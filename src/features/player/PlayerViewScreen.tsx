@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { ref, onValue } from 'firebase/database';
-import { db } from '@/shared/lib/firebase';
+import { useState } from 'react';
 import styles from './player.module.scss';
 import dynamic from 'next/dynamic';
 import { Volume2, VolumeX, Radio, Pause, Music } from 'lucide-react';
 import SoundboardPlayer from '@/shared/components/SoundboardPlayer';
+import { useSession } from '@/shared/hooks/useSession';
 
 // Dynamic import to avoid SSR (Hydration Mismatch)
 const MusicPlayer = dynamic(() => import('@/shared/components/MusicPlayer'), {
@@ -14,52 +13,12 @@ const MusicPlayer = dynamic(() => import('@/shared/components/MusicPlayer'), {
 });
 
 export default function PlayerViewScreen() {
+  const { scene, music } = useSession();
   const [hasJoined, setHasJoined] = useState(false);
-  const [sceneUrl, setSceneUrl] = useState('');
-  const [sceneTitle, setSceneTitle] = useState('');
 
   // Local volume state
   const [localVolume, setLocalVolume] = useState(50);
   const [isMuted, setIsMuted] = useState(false);
-
-  // Music state from Firebase
-  const [musicState, setMusicState] = useState({
-    videoId: '',
-    title: '',
-    isPlaying: false,
-    volume: 50
-  });
-
-  useEffect(() => {
-    // Listen for scene changes
-    const sceneRef = ref(db, 'session/current/scene');
-    const unsubScene = onValue(sceneRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        if (data.imageUrl) setSceneUrl(data.imageUrl);
-        if (data.title) setSceneTitle(data.title);
-      }
-    });
-
-    // Listen for music changes
-    const musicRef = ref(db, 'session/current/music');
-    const unsubMusic = onValue(musicRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setMusicState({
-          videoId: data.videoId || '',
-          title: data.title || '',
-          isPlaying: data.isPlaying || false,
-          volume: typeof data.volume === 'number' ? data.volume : 50
-        });
-      }
-    });
-
-    return () => {
-      unsubScene();
-      unsubMusic();
-    };
-  }, []);
 
   const handleJoin = () => {
     setHasJoined(true);
@@ -73,8 +32,8 @@ export default function PlayerViewScreen() {
         <>
           <div className={styles.playerWrapper}>
             <MusicPlayer
-              videoId={musicState.videoId}
-              playing={musicState.isPlaying}
+              videoId={music.videoId}
+              playing={music.isPlaying}
               volume={isMuted ? 0 : localVolume}
             />
           </div>
@@ -85,11 +44,11 @@ export default function PlayerViewScreen() {
           {/* Centered Info & Controls */}
           <div className={styles.centerControls}>
             <div className={styles.infoPanel}>
-              {sceneTitle && <h2 className={styles.sceneTitle}>{sceneTitle}</h2>}
+              {scene.title && <h2 className={styles.sceneTitle}>{scene.title}</h2>}
 
               <div className={styles.statusIcon}>
-                {musicState.videoId ? (
-                  musicState.isPlaying ? (
+                {music.videoId ? (
+                  music.isPlaying ? (
                     <div className={styles.waveContainer}>
                       <div className={styles.waveBar} />
                       <div className={styles.waveBar} />
@@ -108,7 +67,7 @@ export default function PlayerViewScreen() {
               <div className={styles.nowPlaying}>
                 <span className={styles.label}>Now Playing:</span>
                 <span className={styles.trackName}>
-                  {musicState.title || (musicState.videoId ? 'Loading...' : 'No Music')}
+                  {music.title || (music.videoId ? 'Loading...' : 'No Music')}
                 </span>
               </div>
 
@@ -140,7 +99,7 @@ export default function PlayerViewScreen() {
       {/* Background Layer */}
       <div
         className={styles.background}
-        style={{ backgroundImage: sceneUrl ? `url(${sceneUrl})` : 'none' }}
+        style={{ backgroundImage: scene.imageUrl ? `url(${scene.imageUrl})` : 'none' }}
       />
 
       {/* "Join" Overlay */}

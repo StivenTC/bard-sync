@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ref, update, onValue } from 'firebase/database';
-import { db } from '@/shared/lib/firebase';
 import styles from './gm.module.scss';
 import dynamic from 'next/dynamic';
 import SoundboardPanel from './components/SoundboardPanel';
 import SoundboardPlayer from '@/shared/components/SoundboardPlayer';
+import { useSession } from '@/shared/hooks/useSession';
+import { HistoryItem } from '@/shared/types';
 import {
   Play,
   Pause,
@@ -25,28 +25,23 @@ const MusicPlayer = dynamic(() => import('@/shared/components/MusicPlayer'), {
   ssr: false
 });
 
-// Types for our state
-interface SceneState {
-  imageUrl: string;
-  title?: string;
-}
-
-interface MusicState {
-  videoId: string;
-  isPlaying: boolean;
-}
-
-interface HistoryItem {
-  name: string;
-  value: string;
-}
-
 export default function GMConsoleScreen() {
+  const { scene, music, updateScene, updateMusic } = useSession();
+
   // Local state for inputs
   const [sceneUrl, setSceneUrl] = useState('');
   const [sceneTitle, setSceneTitle] = useState('');
   const [musicId, setMusicId] = useState('');
-  const [isPlaying, setIsPlaying] = useState(false);
+
+  // Sync local state with hook state when it changes from external source
+  useEffect(() => {
+    if (scene.imageUrl) setSceneUrl(scene.imageUrl);
+    if (scene.title) setSceneTitle(scene.title);
+  }, [scene]);
+
+  useEffect(() => {
+    if (music.videoId) setMusicId(music.videoId);
+  }, [music]);
 
   // History state
   const [recentScenes, setRecentScenes] = useState<HistoryItem[]>([]);
@@ -90,33 +85,6 @@ export default function GMConsoleScreen() {
     }
   }, []);
 
-  // Load initial state from Firebase
-  useEffect(() => {
-    const sceneRef = ref(db, 'session/current/scene');
-    const musicRef = ref(db, 'session/current/music');
-
-    const unsubScene = onValue(sceneRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        if (data.imageUrl) setSceneUrl(data.imageUrl);
-        if (data.title) setSceneTitle(data.title);
-      }
-    });
-
-    const unsubMusic = onValue(musicRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        if (data.videoId) setMusicId(data.videoId);
-        if (typeof data.isPlaying === 'boolean') setIsPlaying(data.isPlaying);
-      }
-    });
-
-    return () => {
-      unsubScene();
-      unsubMusic();
-    };
-  }, []);
-
   const addToHistory = (name: string, value: string, list: HistoryItem[], setter: (val: HistoryItem[]) => void, key: string) => {
     if (!value) return;
     // Remove existing item with same value to avoid duplicates
@@ -127,9 +95,9 @@ export default function GMConsoleScreen() {
     localStorage.setItem(key, JSON.stringify(newList));
   };
 
-  const updateScene = async () => {
+  const handleUpdateScene = async () => {
     try {
-      await update(ref(db, 'session/current/scene'), {
+      await updateScene({
         imageUrl: sceneUrl,
         title: sceneTitle
       });
@@ -174,7 +142,7 @@ export default function GMConsoleScreen() {
     return null;
   };
 
-  const updateMusicState = async (updates: Partial<MusicState> & { title?: string }) => {
+  const handleUpdateMusicState = async (updates: { videoId?: string; isPlaying?: boolean; title?: string }) => {
     try {
       // If we have a videoId but no title in updates, try to get it from cache or fetch it
       let titleToSave = updates.title;
@@ -193,10 +161,9 @@ export default function GMConsoleScreen() {
         addToHistory(name, id, recentTracks, setRecentTracks, 'recentTracks');
       }
 
-      await update(ref(db, 'session/current/music'), {
+      await updateMusic({
         ...updates,
-        title: titleToSave || null,
-        timestamp: Date.now() // Force update
+        title: titleToSave || undefined
       });
 
     } catch (error) {
@@ -295,7 +262,7 @@ export default function GMConsoleScreen() {
             )}
           </div>
           <div className={styles.buttonGroup}>
-            <button className={`${styles.btn} ${styles.primary}`} onClick={updateScene}>
+            <button className={`${styles.btn} ${styles.primary}`} onClick={handleUpdateScene}>
               <RefreshCw size={18} /> Update Scene
             </button>
           </div>
@@ -308,7 +275,7 @@ export default function GMConsoleScreen() {
           {/* Hidden Local Player for GM */}
           <MusicPlayer
             videoId={musicId}
-            playing={isPlaying}
+            playing={music.isPlaying}
             volume={isMuted ? 0 : localVolume}
           />
 
@@ -374,15 +341,15 @@ export default function GMConsoleScreen() {
 
           <div className={styles.buttonGroup}>
             <button
-              className={`${styles.btn} ${isPlaying ? styles.secondary : styles.primary}`}
-              onClick={() => updateMusicState({ isPlaying: !isPlaying, videoId: musicId })}
+              className={`${styles.btn} ${music.isPlaying ? styles.secondary : styles.primary}`}
+              onClick={() => handleUpdateMusicState({ isPlaying: !music.isPlaying, videoId: musicId })}
             >
-              {isPlaying ? <Pause size={18} /> : <Play size={18} />}
-              {isPlaying ? ' PAUSE' : ' PLAY'}
+              {music.isPlaying ? <Pause size={18} /> : <Play size={18} />}
+              {music.isPlaying ? ' PAUSE' : ' PLAY'}
             </button>
             <button
               className={`${styles.btn} ${styles.primary}`}
-              onClick={() => updateMusicState({ videoId: musicId, isPlaying: true })}
+              onClick={() => handleUpdateMusicState({ videoId: musicId, isPlaying: true })}
             >
               <RefreshCw size={18} /> Load & Play
             </button>

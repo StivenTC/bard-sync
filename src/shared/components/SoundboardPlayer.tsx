@@ -1,14 +1,7 @@
-'use client';
-
 import { useEffect, useRef } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { db } from '@/shared/lib/firebase';
-
-interface SfxState {
-  url: string;
-  timestamp: number;
-  name?: string;
-}
+import { SfxState } from '@/shared/types';
 
 interface SoundboardPlayerProps {
   volume?: number; // 0-100
