@@ -223,8 +223,7 @@ export default function GMConsoleScreen() {
                   type="text"
                   value={sceneTitle}
                   onChange={(e) => setSceneTitle(e.target.value)}
-                  placeholder="The Prancing Pony"
-                />
+                  placeholder="The Prancing Pony" />
               </div>
             </div>
           </div>
@@ -239,8 +238,7 @@ export default function GMConsoleScreen() {
                   type="url"
                   value={sceneUrl}
                   onChange={(e) => setSceneUrl(e.target.value)}
-                  placeholder="https://example.com/map.jpg"
-                />
+                  placeholder="https://example.com/map.jpg" />
               </div>
               <button className={styles.iconBtn} onClick={() => handlePaste(setSceneUrl)} title="Paste" aria-label="Paste Image URL">
                 <ClipboardPaste size={18} aria-hidden="true" />
@@ -258,8 +256,7 @@ export default function GMConsoleScreen() {
                       if (item.name && item.name !== 'Untitled Scene') setSceneTitle(item.name);
                     }}
                     title={item.value}
-                    aria-label={`Load scene: ${item.name}`}
-                  >
+                    aria-label={`Load scene: ${item.name}`} >
                     {item.name}
                   </button>
                 ))}
@@ -288,8 +285,7 @@ export default function GMConsoleScreen() {
           <MusicPlayer
             videoId={musicId}
             playing={music.isPlaying}
-            volume={isMuted ? 0 : localVolume}
-          />
+            volume={isMuted ? 0 : localVolume} />
 
           <div className={styles.formGroup}>
             <label htmlFor="music-id-input">YouTube Video ID or URL</label>
@@ -301,15 +297,13 @@ export default function GMConsoleScreen() {
                   type="text"
                   value={musicId}
                   onChange={(e) => handleMusicIdChange(e.target.value)}
-                  placeholder="Ex: dQw4w9WgXcQ or full URL"
-                />
+                  placeholder="Ex: dQw4w9WgXcQ or full URL" />
               </div>
               <button
                 className={styles.iconBtn}
                 onClick={() => handlePaste(setMusicId, extractVideoId, true)}
                 title="Paste & Fetch Title"
-                aria-label="Paste and Fetch Video Title"
-              >
+                aria-label="Paste and Fetch Video Title" >
                 <ClipboardPaste size={18} aria-hidden="true" />
               </button>
             </div>
@@ -327,8 +321,7 @@ export default function GMConsoleScreen() {
                       }}
                       title={item.value}
                       aria-label={`Load track: ${item.name}`}
-                      aria-pressed={isSelected}
-                    >
+                      aria-pressed={isSelected} >
                       {item.name}
                     </button>
                   );
@@ -347,14 +340,12 @@ export default function GMConsoleScreen() {
               value={localVolume}
               onChange={(e) => setLocalVolume(parseInt(e.target.value))}
               className={styles.rangeInput}
-              aria-label="Local Volume"
-            />
+              aria-label="Local Volume" />
             <button
               onClick={() => setIsMuted(!isMuted)}
               className={styles.iconBtn}
               title={isMuted ? "Unmute" : "Mute"}
-              aria-label={isMuted ? "Unmute" : "Mute"}
-            >
+              aria-label={isMuted ? "Unmute" : "Mute"}>
               {isMuted ? <VolumeX size={18} aria-hidden="true" /> : <Volume2 size={18} aria-hidden="true" />}
             </button>
           </div>
@@ -363,15 +354,13 @@ export default function GMConsoleScreen() {
             <button
               className={`${styles.btn} ${music.isPlaying ? styles.secondary : styles.primary}`}
               onClick={() => handleUpdateMusicState({ isPlaying: !music.isPlaying, videoId: musicId })}
-              aria-label={music.isPlaying ? "Pause Music" : "Play Music"}
-            >
+              aria-label={music.isPlaying ? "Pause Music" : "Play Music"}>
               {music.isPlaying ? <Pause size={18} aria-hidden="true" /> : <Play size={18} aria-hidden="true" />}
               {music.isPlaying ? ' PAUSE' : ' PLAY'}
             </button>
             <button
               className={`${styles.btn} ${styles.primary}`}
-              onClick={() => handleUpdateMusicState({ videoId: musicId, isPlaying: true })}
-            >
+              onClick={() => handleUpdateMusicState({ videoId: musicId, isPlaying: true })}>
               <RefreshCw size={18} aria-hidden="true" /> Load & Play
             </button>
           </div>

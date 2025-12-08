@@ -41,8 +41,7 @@ export default function MusicPlayer({ videoId, playing, volume }: MusicPlayerPro
         onStart={() => console.log('MusicPlayer: Started')}
         onPlay={() => console.log('MusicPlayer: Playing')}
         onPause={() => console.log('MusicPlayer: Paused')}
-        onError={(e: unknown) => console.error('MusicPlayer Error:', e)}
-      />
+        onError={(e: unknown) => console.error('MusicPlayer Error:', e)} />
     </div>
   );
 }

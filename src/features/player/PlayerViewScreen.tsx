@@ -53,8 +53,7 @@ export default function PlayerViewScreen() {
             <MusicPlayer
               videoId={music.videoId}
               playing={music.isPlaying}
-              volume={isMuted ? 0 : localVolume}
-            />
+              volume={isMuted ? 0 : localVolume} />
           </div>
 
           {/* Soundboard Player (Invisible) */}
@@ -95,8 +94,7 @@ export default function PlayerViewScreen() {
                   onClick={() => setIsMuted(!isMuted)}
                   className={styles.iconBtn}
                   title={isMuted ? "Unmute" : "Mute"}
-                  aria-label={isMuted ? "Unmute" : "Mute"}
-                >
+                  aria-label={isMuted ? "Unmute" : "Mute"} >
                   {isMuted ? <VolumeX size={20} aria-hidden="true" /> : <Volume2 size={20} aria-hidden="true" />}
                 </button>
 
@@ -109,8 +107,7 @@ export default function PlayerViewScreen() {
                   value={localVolume}
                   onChange={(e) => setLocalVolume(parseInt(e.target.value))}
                   className={styles.rangeInput}
-                  aria-label="Volume Control"
-                />
+                  aria-label="Volume Control" />
 
                 <span className={styles.volumeLabel} aria-hidden="true">{localVolume}%</span>
               </div>
@@ -124,8 +121,7 @@ export default function PlayerViewScreen() {
         className={styles.background}
         style={{ backgroundImage: scene.imageUrl ? `url(${scene.imageUrl})` : 'none' }}
         role="img"
-        aria-label={scene.title ? `Background image: ${scene.title}` : "Background image"}
-      />
+        aria-label={scene.title ? `Background image: ${scene.title}` : "Background image"} />
 
       {/* "Join" Overlay */}
       {!hasJoined && (

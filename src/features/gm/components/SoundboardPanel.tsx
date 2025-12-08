@@ -64,8 +64,7 @@ export default function SoundboardPanel() {
             }}
             onClick={() => playSfx(sfx.url, sfx.name)}
             title={sfx.name}
-            aria-label={`Play sound: ${sfx.name}`}
-          >
+            aria-label={`Play sound: ${sfx.name}`} >
             <div style={{ marginBottom: '0.5rem', color: 'var(--color-accent-gold)' }} aria-hidden="true">
               {sfx.icon}
             </div>
@@ -84,16 +83,14 @@ export default function SoundboardPanel() {
               type="text"
               value={customUrl}
               onChange={(e) => setCustomUrl(e.target.value)}
-              placeholder="https://example.com/sound.mp3"
-            />
+              placeholder="https://example.com/sound.mp3" />
           </div>
           <button
             className={styles.iconBtn}
             onClick={() => playSfx(customUrl, 'Custom SFX')}
             disabled={!customUrl}
             title="Play Custom SFX"
-            aria-label="Play Custom Sound Effect"
-          >
+            aria-label="Play Custom Sound Effect" >
             <Play size={18} aria-hidden="true" />
           </button>
         </div>
