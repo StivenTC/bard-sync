@@ -2,7 +2,8 @@
 
 import _ReactPlayer from 'react-player';
 
-// Cast to any to avoid TS errors with React 19
+// Cast to any to avoid TS errors with React 19. 
+// Ideally we would use React.ComponentProps<typeof _ReactPlayer> but it seems to be missing 'url' in some versions or contexts.
 const ReactPlayer = _ReactPlayer as unknown as React.ComponentType<any>;
 
 interface MusicPlayerProps {
@@ -40,7 +41,7 @@ export default function MusicPlayer({ videoId, playing, volume }: MusicPlayerPro
         onStart={() => console.log('MusicPlayer: Started')}
         onPlay={() => console.log('MusicPlayer: Playing')}
         onPause={() => console.log('MusicPlayer: Paused')}
-        onError={(e: any) => console.error('MusicPlayer Error:', e)}
+        onError={(e: unknown) => console.error('MusicPlayer Error:', e)}
       />
     </div>
   );

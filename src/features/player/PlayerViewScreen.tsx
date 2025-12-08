@@ -13,7 +13,7 @@ const MusicPlayer = dynamic(() => import('@/shared/components/MusicPlayer'), {
 });
 
 export default function PlayerViewScreen() {
-  const { scene, music } = useSession();
+  const { scene, music, isLoading, error } = useSession();
   const [hasJoined, setHasJoined] = useState(false);
 
   // Local volume state
@@ -24,6 +24,25 @@ export default function PlayerViewScreen() {
     setHasJoined(true);
     console.log("Player joined session - Audio enabled");
   };
+
+  if (isLoading) {
+    return (
+      <main className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ color: 'var(--color-accent-gold)' }}>Loading Tavern...</div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ color: 'red', textAlign: 'center' }}>
+          <h2>Connection Error</h2>
+          <p>{error}</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className={styles.container}>

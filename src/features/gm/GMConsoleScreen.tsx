@@ -26,7 +26,7 @@ const MusicPlayer = dynamic(() => import('@/shared/components/MusicPlayer'), {
 });
 
 export default function GMConsoleScreen() {
-  const { scene, music, updateScene, updateMusic } = useSession();
+  const { scene, music, isLoading, error, updateScene, updateMusic } = useSession();
 
   // Local state for inputs
   const [sceneUrl, setSceneUrl] = useState('');
@@ -192,11 +192,20 @@ export default function GMConsoleScreen() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <main className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ color: 'var(--color-accent-gold)' }}>Loading GM Console...</div>
+      </main>
+    );
+  }
+
   return (
     <main className={styles.container}>
       <header className={styles.header}>
         <h1>GM Console</h1>
         {status && <div className={`${styles.status} ${styles.success}`} role="alert">{status}</div>}
+        {error && <div className={`${styles.status} ${styles.error}`} role="alert">{error}</div>}
       </header>
 
       <div className={styles.grid}>
