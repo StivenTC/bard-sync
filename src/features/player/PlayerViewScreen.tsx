@@ -27,16 +27,16 @@ export default function PlayerViewScreen() {
 
   if (isLoading) {
     return (
-      <main className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ color: 'var(--color-accent-gold)' }}>Loading Tavern...</div>
+      <main className={styles.loadingContainer}>
+        <div className={styles.loadingText}>Loading Tavern...</div>
       </main>
     );
   }
 
   if (error) {
     return (
-      <main className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ color: 'red', textAlign: 'center' }}>
+      <main className={styles.errorContainer}>
+        <div className={styles.errorContent}>
           <h2>Connection Error</h2>
           <p>{error}</p>
         </div>
@@ -78,7 +78,7 @@ export default function PlayerViewScreen() {
                     <Pause size={32} />
                   )
                 ) : (
-                  <Music size={32} style={{ opacity: 0.5 }} />
+                  <Music size={32} className={styles.iconFaded} />
                 )}
               </div>
 

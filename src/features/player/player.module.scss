@@ -278,3 +278,33 @@
   min-width: 3ch;
   text-align: right;
 }
+
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background: var(--color-bg-start);
+}
+
+.loadingText {
+  color: var(--color-accent-gold);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+}
+
+.errorContent {
+  color: var(--color-accent-red);
+  text-align: center;
+
+  h2 {
+    font-family: var(--font-heading);
+    margin-bottom: 0.5rem;
+  }
+}
+
+.iconFaded {
+  opacity: 0.5;
+}

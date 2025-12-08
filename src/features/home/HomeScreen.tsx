@@ -30,7 +30,7 @@ export default function HomeScreen() {
           System Status: <strong>{isConnected ? 'Online' : 'Connecting...'}</strong>
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div className={styles.buttonGroup}>
           <Link href="/" className={styles.btn} aria-label="Go to GM Console">
             <Shield size={20} aria-hidden="true" /> GM Console
           </Link>
@@ -41,7 +41,7 @@ export default function HomeScreen() {
       </section>
 
       <footer className={styles.footer}>
-        <p><Scroll size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} aria-hidden="true" /> Crafted by Tcla for Game Masters</p>
+        <p><Scroll size={16} className={styles.footerIcon} aria-hidden="true" /> Crafted by Tcla for Game Masters</p>
       </footer>
     </main>
   );

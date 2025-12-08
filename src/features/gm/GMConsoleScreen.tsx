@@ -194,8 +194,8 @@ export default function GMConsoleScreen() {
 
   if (isLoading) {
     return (
-      <main className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ color: 'var(--color-accent-gold)' }}>Loading GM Console...</div>
+      <main className={styles.loadingContainer}>
+        <div className={styles.loadingText}>Loading GM Console...</div>
       </main>
     );
   }

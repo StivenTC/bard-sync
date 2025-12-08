@@ -48,24 +48,15 @@ export default function SoundboardPanel() {
     <section className={styles.card} aria-labelledby="soundboard-title">
       <h2 id="soundboard-title"><Music size={24} aria-hidden="true" /> Soundboard</h2>
 
-      <div className={styles.grid} style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '0.75rem' }} role="group" aria-label="Sound Effects">
+      <div className={styles.sfxGrid} role="group" aria-label="Sound Effects">
         {PRESET_SFX.map((sfx) => (
           <button
             key={sfx.name}
-            className={styles.btn}
-            style={{
-              flexDirection: 'column',
-              padding: '1rem 0.5rem',
-              fontSize: '0.8rem',
-              height: 'auto',
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: 'var(--color-text-primary)'
-            }}
+            className={`${styles.btn} ${styles.sfxBtn}`}
             onClick={() => playSfx(sfx.url, sfx.name)}
             title={sfx.name}
             aria-label={`Play sound: ${sfx.name}`} >
-            <div style={{ marginBottom: '0.5rem', color: 'var(--color-accent-gold)' }} aria-hidden="true">
+            <div className={styles.sfxIcon} aria-hidden="true">
               {sfx.icon}
             </div>
             <span>{sfx.name}</span>
@@ -73,7 +64,7 @@ export default function SoundboardPanel() {
         ))}
       </div>
 
-      <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
+      <div className={`${styles.formGroup} ${styles.customSfxGroup}`}>
         <label htmlFor="custom-sfx-url">Custom SFX URL</label>
         <div className={styles.inputGroup}>
           <div className={styles.iconInput}>
@@ -96,7 +87,7 @@ export default function SoundboardPanel() {
         </div>
       </div>
 
-      {status && <div className={styles.status} style={{ marginTop: '0.5rem', textAlign: 'center' }} role="status">{status}</div>}
+      {status && <div className={`${styles.status} ${styles.sfxStatus}`} role="status">{status}</div>}
     </section>
   );
 }

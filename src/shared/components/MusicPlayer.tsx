@@ -2,6 +2,8 @@
 
 import _ReactPlayer from 'react-player';
 
+import styles from './MusicPlayer.module.scss';
+
 // Cast to any to avoid TS errors with React 19. 
 // Ideally we would use React.ComponentProps<typeof _ReactPlayer> but it seems to be missing 'url' in some versions or contexts.
 const ReactPlayer = _ReactPlayer as unknown as React.ComponentType<any>;
@@ -21,14 +23,14 @@ export default function MusicPlayer({ videoId, playing, volume }: MusicPlayerPro
 
   if (!videoId) {
     return (
-      <div style={{ color: 'white', padding: '20px', textAlign: 'center' }}>
+      <div className={styles.waitingMessage}>
         Waiting for music...
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'none' }}>
+    <div className={styles.hiddenPlayer}>
       <ReactPlayer
         src={url}
         playing={playing}
