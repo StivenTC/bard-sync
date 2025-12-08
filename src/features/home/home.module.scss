@@ -1,3 +1,5 @@
+@use '@/shared/styles/mixins' as *;
+
 .container {
   display: flex;
   flex-direction: column;
@@ -51,19 +53,13 @@
 }
 
 .card {
-  background-color: var(--color-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--color-glass-border);
-  border-radius: 16px;
+  @include glass-card;
   padding: 3rem;
   max-width: 600px;
   width: 100%;
-  box-shadow: var(--shadow-deep);
-  transition: all 0.4s ease;
-  position: relative;
-  z-index: 1;
+  border-radius: 16px;
 
+  // Override specific to home card
   &::after {
     content: '';
     position: absolute;
@@ -79,8 +75,6 @@
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-glow), var(--shadow-deep);
-    border-color: var(--color-glass-highlight);
   }
 }
 
@@ -100,10 +94,7 @@
 }
 
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
+  @include btn-base;
   padding: 1rem 2.5rem;
   background: linear-gradient(135deg, rgba(12, 10, 9, 0.8) 0%, rgba(44, 11, 14, 0.8) 100%);
   border: 1px solid var(--color-glass-border);
@@ -112,12 +103,7 @@
   font-weight: bold;
   font-size: 1.1rem;
   border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  text-decoration: none;
 
   &:hover {
     background: linear-gradient(135deg, rgba(44, 11, 14, 0.9) 0%, rgba(127, 29, 29, 0.4) 100%);
@@ -125,10 +111,6 @@
     color: var(--color-accent-gold);
     box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
     transform: translateY(-2px);
-  }
-
-  &:active {
-    transform: scale(0.98);
   }
 }
 

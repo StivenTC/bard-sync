@@ -1,0 +1,175 @@
+@mixin glass-card {
+  background-color: var(--color-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-deep);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+
+  /* Noise texture overlay */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Content wrapper to stay above noise */
+  >* {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:hover {
+    border-color: var(--color-glass-highlight);
+    box-shadow: var(--shadow-glow), var(--shadow-deep);
+  }
+}
+
+@mixin btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  text-decoration: none;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@mixin btn-primary {
+  @include btn-base;
+  background: linear-gradient(135deg, #500a0a 0%, var(--color-accent-red) 100%);
+  border: 1px solid rgba(255, 100, 100, 0.2);
+  color: #ffdada;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, #600c0c 0%, #991b1b 100%);
+    border-color: rgba(255, 150, 150, 0.4);
+    box-shadow: 0 0 20px rgba(127, 29, 29, 0.5);
+    transform: translateY(-1px);
+  }
+}
+
+@mixin btn-secondary {
+  @include btn-base;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-text-secondary);
+
+  &:hover {
+    border-color: var(--color-text-primary);
+    color: var(--color-text-primary);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+@mixin btn-icon {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-secondary);
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  min-width: 40px;
+  height: 40px;
+
+  &:hover {
+    background-color: rgba(212, 175, 55, 0.1);
+    border-color: var(--color-accent-gold);
+    color: var(--color-accent-gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+  }
+}
+
+@mixin input-text-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 0 0.75rem;
+  transition: all 0.3s ease;
+  height: 40px;
+
+  &:focus-within {
+    border-color: var(--color-accent-gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  svg {
+    color: var(--color-text-secondary);
+    margin-right: 0.5rem;
+    transition: color 0.3s;
+  }
+
+  &:focus-within svg {
+    color: var(--color-accent-gold);
+  }
+
+  input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    outline: none;
+    width: 100%;
+    font-family: var(--font-body);
+
+    &::placeholder {
+      color: rgba(168, 162, 158, 0.5);
+    }
+  }
+}
+
+@mixin input-range {
+  width: 100%;
+  cursor: pointer;
+  accent-color: var(--color-accent-gold);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  appearance: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background: var(--color-accent-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    margin-top: -5px;
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+}
