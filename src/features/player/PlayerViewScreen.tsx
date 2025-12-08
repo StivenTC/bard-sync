@@ -6,10 +6,10 @@ import { db } from '@/lib/firebase';
 import styles from './player.module.scss';
 import dynamic from 'next/dynamic';
 import { Volume2, VolumeX, Radio, Pause, Music } from 'lucide-react';
-import SoundboardPlayer from './components/SoundboardPlayer';
+import SoundboardPlayer from '@/components/SoundboardPlayer';
 
 // Dynamic import to avoid SSR (Hydration Mismatch)
-const MusicPlayer = dynamic(() => import('./components/MusicPlayer'), {
+const MusicPlayer = dynamic(() => import('@/components/MusicPlayer'), {
   ssr: false
 });
 

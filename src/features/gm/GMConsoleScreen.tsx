@@ -6,7 +6,7 @@ import { db } from '@/lib/firebase';
 import styles from './gm.module.scss';
 import dynamic from 'next/dynamic';
 import SoundboardPanel from './components/SoundboardPanel';
-import SoundboardPlayer from '@/features/player/components/SoundboardPlayer';
+import SoundboardPlayer from '@/components/SoundboardPlayer';
 import {
   Play,
   Pause,
@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 // Dynamic import for MusicPlayer
-const MusicPlayer = dynamic(() => import('@/features/player/components/MusicPlayer'), {
+const MusicPlayer = dynamic(() => import('@/components/MusicPlayer'), {
   ssr: false
 });
 
