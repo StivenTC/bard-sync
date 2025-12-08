@@ -7,7 +7,6 @@ export interface MusicState {
   videoId: string;
   isPlaying: boolean;
   title?: string;
-  volume?: number;
   timestamp?: number;
 }
 

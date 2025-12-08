@@ -36,7 +36,6 @@ export function useSession() {
           videoId: data.videoId || '',
           isPlaying: typeof data.isPlaying === 'boolean' ? data.isPlaying : false,
           title: data.title,
-          volume: data.volume,
           timestamp: data.timestamp
         });
       }
