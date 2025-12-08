@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ref, onValue, set } from 'firebase/database';
-import { db } from '@/lib/firebase';
+import { db } from '@/shared/lib/firebase';
 import styles from './home.module.scss';
 import { Scroll, Users, Shield } from 'lucide-react';
 

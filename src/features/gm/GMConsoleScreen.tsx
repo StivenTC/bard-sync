@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { ref, update, onValue } from 'firebase/database';
-import { db } from '@/lib/firebase';
+import { db } from '@/shared/lib/firebase';
 import styles from './gm.module.scss';
 import dynamic from 'next/dynamic';
 import SoundboardPanel from './components/SoundboardPanel';
-import SoundboardPlayer from '@/components/SoundboardPlayer';
+import SoundboardPlayer from '@/shared/components/SoundboardPlayer';
 import {
   Play,
   Pause,
@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 // Dynamic import for MusicPlayer
-const MusicPlayer = dynamic(() => import('@/components/MusicPlayer'), {
+const MusicPlayer = dynamic(() => import('@/shared/components/MusicPlayer'), {
   ssr: false
 });
 

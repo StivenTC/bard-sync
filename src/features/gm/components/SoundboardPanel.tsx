@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ref, update } from 'firebase/database';
-import { db } from '@/lib/firebase';
+import { db } from '@/shared/lib/firebase';
 import styles from '../gm.module.scss'; // Reusing GM styles for consistency
 import {
   Sword,

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { ref, onValue } from 'firebase/database';
-import { db } from '@/lib/firebase';
+import { db } from '@/shared/lib/firebase';
 
 interface SfxState {
   url: string;

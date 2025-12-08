@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { ref, onValue } from 'firebase/database';
-import { db } from '@/lib/firebase';
+import { db } from '@/shared/lib/firebase';
 import styles from './player.module.scss';
 import dynamic from 'next/dynamic';
 import { Volume2, VolumeX, Radio, Pause, Music } from 'lucide-react';
-import SoundboardPlayer from '@/components/SoundboardPlayer';
+import SoundboardPlayer from '@/shared/components/SoundboardPlayer';
 
 // Dynamic import to avoid SSR (Hydration Mismatch)
-const MusicPlayer = dynamic(() => import('@/components/MusicPlayer'), {
+const MusicPlayer = dynamic(() => import('@/shared/components/MusicPlayer'), {
   ssr: false
 });
 
