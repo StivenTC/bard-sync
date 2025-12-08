@@ -10,6 +10,12 @@ interface SoundboardPlayerProps {
 export default function SoundboardPlayer({ volume = 50 }: SoundboardPlayerProps) {
   const lastPlayedRef = useRef<number>(0);
 
+  const volumeRef = useRef(volume);
+
+  useEffect(() => {
+    volumeRef.current = volume;
+  }, [volume]);
+
   useEffect(() => {
     const sfxRef = ref(db, 'session/current/sfx');
 
@@ -29,7 +35,7 @@ export default function SoundboardPlayer({ volume = 50 }: SoundboardPlayerProps)
           // Create a new Audio instance for each sound (Polyphony)
           // This prevents "play() request was interrupted" errors and allows overlapping sounds
           const audio = new Audio(data.url);
-          audio.volume = volume / 100;
+          audio.volume = volumeRef.current / 100;
           audio.play().catch(e => console.error("Error playing SFX:", e));
         } else if (isNew && !isRecent) {
           lastPlayedRef.current = data.timestamp;
@@ -38,7 +44,7 @@ export default function SoundboardPlayer({ volume = 50 }: SoundboardPlayerProps)
     });
 
     return () => unsubscribe();
-  }, [volume]); // Re-subscribe if volume changes to ensure new sounds get current volume
+  }, []); // Empty dependency array - only subscribe once
 
   return null; // Invisible component
 }

@@ -83,7 +83,7 @@ export default function PlayerViewScreen() {
               </div>
 
               <div className={styles.nowPlaying} aria-live="polite">
-                <span className={styles.label}>Now Playing:</span>
+                <span className={styles.label}>{!music.videoId ? 'Status:' : (music.isPlaying ? 'Now Playing:' : 'Music is paused')}</span>
                 <span className={styles.trackName}>
                   {music.title || (music.videoId ? 'Loading...' : 'No Music')}
                 </span>
