@@ -45,10 +45,10 @@ export default function SoundboardPanel() {
   };
 
   return (
-    <div className={styles.card}>
-      <h2><Music size={24} /> Soundboard</h2>
+    <section className={styles.card} aria-labelledby="soundboard-title">
+      <h2 id="soundboard-title"><Music size={24} aria-hidden="true" /> Soundboard</h2>
 
-      <div className={styles.grid} style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '0.75rem' }}>
+      <div className={styles.grid} style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '0.75rem' }} role="group" aria-label="Sound Effects">
         {PRESET_SFX.map((sfx) => (
           <button
             key={sfx.name}
@@ -64,8 +64,9 @@ export default function SoundboardPanel() {
             }}
             onClick={() => playSfx(sfx.url, sfx.name)}
             title={sfx.name}
+            aria-label={`Play sound: ${sfx.name}`}
           >
-            <div style={{ marginBottom: '0.5rem', color: 'var(--color-accent-gold)' }}>
+            <div style={{ marginBottom: '0.5rem', color: 'var(--color-accent-gold)' }} aria-hidden="true">
               {sfx.icon}
             </div>
             <span>{sfx.name}</span>
@@ -74,11 +75,12 @@ export default function SoundboardPanel() {
       </div>
 
       <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
-        <label>Custom SFX URL</label>
+        <label htmlFor="custom-sfx-url">Custom SFX URL</label>
         <div className={styles.inputGroup}>
           <div className={styles.iconInput}>
-            <Music size={16} />
+            <Music size={16} aria-hidden="true" />
             <input
+              id="custom-sfx-url"
               type="text"
               value={customUrl}
               onChange={(e) => setCustomUrl(e.target.value)}
@@ -90,13 +92,14 @@ export default function SoundboardPanel() {
             onClick={() => playSfx(customUrl, 'Custom SFX')}
             disabled={!customUrl}
             title="Play Custom SFX"
+            aria-label="Play Custom Sound Effect"
           >
-            <Play size={18} />
+            <Play size={18} aria-hidden="true" />
           </button>
         </div>
       </div>
 
-      {status && <div className={styles.status} style={{ marginTop: '0.5rem', textAlign: 'center' }}>{status}</div>}
-    </div>
+      {status && <div className={styles.status} style={{ marginTop: '0.5rem', textAlign: 'center' }} role="status">{status}</div>}
+    </section>
   );
 }

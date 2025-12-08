@@ -193,23 +193,24 @@ export default function GMConsoleScreen() {
   };
 
   return (
-    <div className={styles.container}>
+    <main className={styles.container}>
       <header className={styles.header}>
         <h1>GM Console</h1>
-        {status && <div className={`${styles.status} ${styles.success}`}>{status}</div>}
+        {status && <div className={`${styles.status} ${styles.success}`} role="alert">{status}</div>}
       </header>
 
       <div className={styles.grid}>
         {/* Scene Panel */}
-        <div className={styles.card}>
-          <h2><ImageIcon size={24} /> Visual Scene</h2>
+        <section className={styles.card} aria-labelledby="scene-title">
+          <h2 id="scene-title"><ImageIcon size={24} aria-hidden="true" /> Visual Scene</h2>
 
           <div className={styles.formGroup}>
-            <label>Scene Title</label>
+            <label htmlFor="scene-title-input">Scene Title</label>
             <div className={styles.inputGroup}>
               <div className={styles.iconInput}>
-                <Type size={16} />
+                <Type size={16} aria-hidden="true" />
                 <input
+                  id="scene-title-input"
                   type="text"
                   value={sceneTitle}
                   onChange={(e) => setSceneTitle(e.target.value)}
@@ -220,24 +221,25 @@ export default function GMConsoleScreen() {
           </div>
 
           <div className={styles.formGroup}>
-            <label>Image URL</label>
+            <label htmlFor="scene-url-input">Image URL</label>
             <div className={styles.inputGroup}>
               <div className={styles.iconInput}>
-                <Link size={16} />
+                <Link size={16} aria-hidden="true" />
                 <input
+                  id="scene-url-input"
                   type="url"
                   value={sceneUrl}
                   onChange={(e) => setSceneUrl(e.target.value)}
                   placeholder="https://example.com/map.jpg"
                 />
               </div>
-              <button className={styles.iconBtn} onClick={() => handlePaste(setSceneUrl)} title="Paste">
-                <ClipboardPaste size={18} />
+              <button className={styles.iconBtn} onClick={() => handlePaste(setSceneUrl)} title="Paste" aria-label="Paste Image URL">
+                <ClipboardPaste size={18} aria-hidden="true" />
               </button>
             </div>
             {/* History Chips */}
             {recentScenes.length > 0 && (
-              <div className={styles.historyChips}>
+              <div className={styles.historyChips} aria-label="Recent Scenes">
                 {recentScenes.map((item, i) => (
                   <button
                     key={i}
@@ -247,6 +249,7 @@ export default function GMConsoleScreen() {
                       if (item.name && item.name !== 'Untitled Scene') setSceneTitle(item.name);
                     }}
                     title={item.value}
+                    aria-label={`Load scene: ${item.name}`}
                   >
                     {item.name}
                   </button>
@@ -254,23 +257,23 @@ export default function GMConsoleScreen() {
               </div>
             )}
           </div>
-          <div className={styles.preview}>
+          <div className={styles.preview} aria-label="Scene Preview">
             {sceneUrl ? (
-              <img src={sceneUrl} alt="Preview" />
+              <img src={sceneUrl} alt={`Preview of ${sceneTitle || 'scene'}`} />
             ) : (
               <p>No image selected</p>
             )}
           </div>
           <div className={styles.buttonGroup}>
             <button className={`${styles.btn} ${styles.primary}`} onClick={handleUpdateScene}>
-              <RefreshCw size={18} /> Update Scene
+              <RefreshCw size={18} aria-hidden="true" /> Update Scene
             </button>
           </div>
-        </div>
+        </section>
 
         {/* Music Panel */}
-        <div className={styles.card}>
-          <h2><Music size={24} /> Music (YouTube)</h2>
+        <section className={styles.card} aria-labelledby="music-title">
+          <h2 id="music-title"><Music size={24} aria-hidden="true" /> Music (YouTube)</h2>
 
           {/* Hidden Local Player for GM */}
           <MusicPlayer
@@ -280,11 +283,12 @@ export default function GMConsoleScreen() {
           />
 
           <div className={styles.formGroup}>
-            <label>YouTube Video ID or URL</label>
+            <label htmlFor="music-id-input">YouTube Video ID or URL</label>
             <div className={styles.inputGroup}>
               <div className={styles.iconInput}>
-                <Link size={16} />
+                <Link size={16} aria-hidden="true" />
                 <input
+                  id="music-id-input"
                   type="text"
                   value={musicId}
                   onChange={(e) => handleMusicIdChange(e.target.value)}
@@ -295,13 +299,14 @@ export default function GMConsoleScreen() {
                 className={styles.iconBtn}
                 onClick={() => handlePaste(setMusicId, extractVideoId, true)}
                 title="Paste & Fetch Title"
+                aria-label="Paste and Fetch Video Title"
               >
-                <ClipboardPaste size={18} />
+                <ClipboardPaste size={18} aria-hidden="true" />
               </button>
             </div>
             {/* History Chips */}
             {recentTracks.length > 0 && (
-              <div className={styles.historyChips}>
+              <div className={styles.historyChips} aria-label="Recent Tracks">
                 {recentTracks.map((item, i) => {
                   const isSelected = musicId === item.value;
                   return (
@@ -312,6 +317,8 @@ export default function GMConsoleScreen() {
                         setMusicId(item.value);
                       }}
                       title={item.value}
+                      aria-label={`Load track: ${item.name}`}
+                      aria-pressed={isSelected}
                     >
                       {item.name}
                     </button>
@@ -322,20 +329,24 @@ export default function GMConsoleScreen() {
           </div>
 
           <div className={styles.volumeControl}>
+            <label htmlFor="local-volume" className="sr-only">Local Volume</label>
             <input
+              id="local-volume"
               type="range"
               min="0"
               max="100"
               value={localVolume}
               onChange={(e) => setLocalVolume(parseInt(e.target.value))}
               className={styles.rangeInput}
+              aria-label="Local Volume"
             />
             <button
               onClick={() => setIsMuted(!isMuted)}
               className={styles.iconBtn}
               title={isMuted ? "Unmute" : "Mute"}
+              aria-label={isMuted ? "Unmute" : "Mute"}
             >
-              {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+              {isMuted ? <VolumeX size={18} aria-hidden="true" /> : <Volume2 size={18} aria-hidden="true" />}
             </button>
           </div>
 
@@ -343,18 +354,19 @@ export default function GMConsoleScreen() {
             <button
               className={`${styles.btn} ${music.isPlaying ? styles.secondary : styles.primary}`}
               onClick={() => handleUpdateMusicState({ isPlaying: !music.isPlaying, videoId: musicId })}
+              aria-label={music.isPlaying ? "Pause Music" : "Play Music"}
             >
-              {music.isPlaying ? <Pause size={18} /> : <Play size={18} />}
+              {music.isPlaying ? <Pause size={18} aria-hidden="true" /> : <Play size={18} aria-hidden="true" />}
               {music.isPlaying ? ' PAUSE' : ' PLAY'}
             </button>
             <button
               className={`${styles.btn} ${styles.primary}`}
               onClick={() => handleUpdateMusicState({ videoId: musicId, isPlaying: true })}
             >
-              <RefreshCw size={18} /> Load & Play
+              <RefreshCw size={18} aria-hidden="true" /> Load & Play
             </button>
           </div>
-        </div>
+        </section>
 
         {/* Soundboard Panel */}
         <SoundboardPanel />
@@ -362,6 +374,6 @@ export default function GMConsoleScreen() {
         {/* Hidden Soundboard Player for GM Monitoring */}
         <SoundboardPlayer volume={isMuted ? 0 : localVolume} />
       </div>
-    </div>
+    </main>
   );
 }

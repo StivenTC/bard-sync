@@ -26,7 +26,7 @@ export default function PlayerViewScreen() {
   };
 
   return (
-    <div className={styles.container}>
+    <main className={styles.container}>
       {/* Music Component (Only renders if joined) */}
       {hasJoined && (
         <>
@@ -42,11 +42,11 @@ export default function PlayerViewScreen() {
           <SoundboardPlayer volume={isMuted ? 0 : localVolume} />
 
           {/* Centered Info & Controls */}
-          <div className={styles.centerControls}>
+          <section className={styles.centerControls} aria-label="Player Controls">
             <div className={styles.infoPanel}>
               {scene.title && <h2 className={styles.sceneTitle}>{scene.title}</h2>}
 
-              <div className={styles.statusIcon}>
+              <div className={styles.statusIcon} aria-hidden="true">
                 {music.videoId ? (
                   music.isPlaying ? (
                     <div className={styles.waveContainer}>
@@ -64,7 +64,7 @@ export default function PlayerViewScreen() {
                 )}
               </div>
 
-              <div className={styles.nowPlaying}>
+              <div className={styles.nowPlaying} aria-live="polite">
                 <span className={styles.label}>Now Playing:</span>
                 <span className={styles.trackName}>
                   {music.title || (music.videoId ? 'Loading...' : 'No Music')}
@@ -76,23 +76,27 @@ export default function PlayerViewScreen() {
                   onClick={() => setIsMuted(!isMuted)}
                   className={styles.iconBtn}
                   title={isMuted ? "Unmute" : "Mute"}
+                  aria-label={isMuted ? "Unmute" : "Mute"}
                 >
-                  {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                  {isMuted ? <VolumeX size={20} aria-hidden="true" /> : <Volume2 size={20} aria-hidden="true" />}
                 </button>
 
+                <label htmlFor="player-volume" className="sr-only">Volume</label>
                 <input
+                  id="player-volume"
                   type="range"
                   min="0"
                   max="100"
                   value={localVolume}
                   onChange={(e) => setLocalVolume(parseInt(e.target.value))}
                   className={styles.rangeInput}
+                  aria-label="Volume Control"
                 />
 
-                <span className={styles.volumeLabel}>{localVolume}%</span>
+                <span className={styles.volumeLabel} aria-hidden="true">{localVolume}%</span>
               </div>
             </div>
-          </div>
+          </section>
         </>
       )}
 
@@ -100,22 +104,24 @@ export default function PlayerViewScreen() {
       <div
         className={styles.background}
         style={{ backgroundImage: scene.imageUrl ? `url(${scene.imageUrl})` : 'none' }}
+        role="img"
+        aria-label={scene.title ? `Background image: ${scene.title}` : "Background image"}
       />
 
       {/* "Join" Overlay */}
       {!hasJoined && (
-        <div className={styles.overlay}>
+        <section className={styles.overlay} aria-labelledby="join-title" role="dialog" aria-modal="true">
           <div className={styles.overlayContent}>
-            <h1>BardSync</h1>
+            <h1 id="join-title">BardSync</h1>
             <p>
               Welcome to the tavern. Click below to join the session and sync with the Game Master.
             </p>
-            <button className={styles.joinButton} onClick={handleJoin}>
-              <Radio size={24} /> Join Session
+            <button className={styles.joinButton} onClick={handleJoin} aria-label="Join Session">
+              <Radio size={24} aria-hidden="true" /> Join Session
             </button>
           </div>
-        </div>
+        </section>
       )}
-    </div>
+    </main>
   );
 }
